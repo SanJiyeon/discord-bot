@@ -1,6 +1,7 @@
 // require('dotenv').config();
 const axios = require('axios');
 const { mapIdolToProperIdol, mapIdolToEmbed } = require('./idol');
+const logger = require('./logger');
 
 const endpoint = 'https://selca.kastden.org/json/noona';
 
@@ -17,8 +18,12 @@ const searchIdols = async (query) => {
       const { idols } = data;
 
       if (idols.length > 0) {
+        logger.info(`Found ${idols.length} idols.`);
         let embedsReturned;
         const properIdols = idols.map((idol) => mapIdolToProperIdol(idol));
+        for (const idol of properIdols) {
+          logger.info(`Found ${idol.stageName} - ${idol.mainGroupDisplayName}`);
+        }
 
         if (!searchRandom) {
           embedsReturned = properIdols.map((idol) => mapIdolToEmbed(idol));
@@ -30,12 +35,12 @@ const searchIdols = async (query) => {
         return embedsReturned;
       }
       const noIdolsMessage = 'Could not find any idol matching that query.';
-      console.log(noIdolsMessage);
+      logger.error(noIdolsMessage);
       return noIdolsMessage;
     } catch (error) {
       const errorMessage = 'Error fetching data from the API.';
-      console.error(error);
-      console.log(errorMessage);
+      logger.error(error);
+      logger.error(errorMessage);
       return errorMessage;
     }
   }
