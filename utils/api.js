@@ -37,6 +37,9 @@ const searchIdols = async (query) => {
             logger.info('Searching random');
             const randomIdol =
               properIdols[Math.floor(Math.random() * properIdols.length)];
+              logger.info(
+                `Found ${randomIdol.stageName} - ${randomIdol.mainGroupDisplayName}`
+              );
             embedsReturned = [mapIdolToEmbed(randomIdol)];
           }
           if (searchFmk) {
@@ -48,6 +51,11 @@ const searchIdols = async (query) => {
               if (!distinctIdols.includes(randomIdol)) {
                 distinctIdols.push(randomIdol);
               }
+            }
+            for (const idol of distinctIdols) {
+              logger.info(
+                `Found ${idol.stageName} - ${idol.mainGroupDisplayName}`
+              );
             }
             embedsReturned = distinctIdols.map((idol) => mapIdolToEmbed(idol));
           }
