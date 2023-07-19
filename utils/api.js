@@ -9,6 +9,8 @@ const searchIdols = async (query) => {
   if (query) {
     const isBefore = query.toLowerCase().includes('<');
     const isAfter = query.toLowerCase().includes('>');
+    const str = "!@#Hello, World!$%^";
+    const literalCharsName = str.replace(/[^a-zA-Z0-9\s]/g, "");
     const searchRandom = query.toLowerCase().split(' ')[0] === 'random';
     const searchFmk = query.toLowerCase().split(' ')[0] === 'fmk';
     const fetchRandom = searchRandom || searchFmk;
@@ -29,7 +31,7 @@ const searchIdols = async (query) => {
 
     const ogParams = fetchRandom
       ? { pt: 'kpop' }
-      : { pt: 'kpop', an_op: 'cnt', an: query };
+      : { pt: 'kpop', an_op: 'cnt', an: literalCharsName };
 
     const params = {
       ...ogParams,
