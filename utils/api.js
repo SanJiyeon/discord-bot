@@ -10,8 +10,8 @@ const searchIdols = async (query) => {
     const isBefore = query.toLowerCase().includes('<');
     const isAfter = query.toLowerCase().includes('>');
     const literalCharsName = query.replace(/[^a-zA-Z0-9\s]/g, '');
-    const searchRandom = query.toLowerCase().split(' ')[0] === 'random';
-    const searchFmk = query.toLowerCase().split(' ')[0] === 'fmk';
+    const searchRandom = query.toLowerCase().includes('random');
+    const searchFmk = query.toLowerCase().includes('fmk');
     const fetchRandom = searchRandom || searchFmk;
     const lastIndex = query.length - 1;
     const year = query.substring(lastIndex - 3, lastIndex + 1);
