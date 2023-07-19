@@ -21,7 +21,7 @@ client.on('ready', () => {
 client.on('messageCreate', async (msg) => {
   if (msg.content.startsWith('!idol')) {
     logger.info('received !idol query');
-    const query = msg.content.split(' ')[1];
+    const query = msg.content.substring(6).trimEnd();
     const idols = await searchIdols(query);
     if (Array.isArray(idols)) {
       msg.channel.send({ embeds: idols });

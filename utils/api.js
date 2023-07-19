@@ -7,12 +7,35 @@ const endpoint = 'https://selca.kastden.org/json/noona';
 
 const searchIdols = async (query) => {
   if (query) {
-    const searchRandom = query.toLowerCase() === 'random';
-    const searchFmk = query.toLowerCase() === 'fmk';
+    const isBefore = query.toLowerCase().includes('<');
+    const isAfter = query.toLowerCase().includes('>');
+    const searchRandom = query.toLowerCase().split(' ')[0] === 'random';
+    const searchFmk = query.toLowerCase().split(' ')[0] === 'fmk';
     const fetchRandom = searchRandom || searchFmk;
-    const params = fetchRandom
+    const lastIndex = query.length - 1;
+    const year = query.substring(lastIndex - 3, lastIndex + 1);
+
+
+    let yearParams = {};
+    if ((isBefore || isAfter) && !Number.isNaN(year) && year.length === 4) {
+      if (isBefore) {
+        logger.info(`Searching before ${year}.`)
+        yearParams = { bd_op: 'lt', bd: year };
+      } else if (isAfter) {
+        logger.info(`Searching after ${year}.`);
+        yearParams = { bd_op: 'gt', bd: year };
+      }
+    }
+
+    const ogParams = fetchRandom
       ? { pt: 'kpop' }
       : { pt: 'kpop', an_op: 'cnt', an: query };
+
+    const params = {
+      ...ogParams,
+      ...yearParams,
+    };
+    logger.info('params:' + JSON.stringify(params));
 
     try {
       const response = await axios.get(endpoint, { params });
@@ -37,9 +60,9 @@ const searchIdols = async (query) => {
             logger.info('Searching random');
             const randomIdol =
               properIdols[Math.floor(Math.random() * properIdols.length)];
-              logger.info(
-                `Found ${randomIdol.stageName} - ${randomIdol.mainGroupDisplayName}`
-              );
+            logger.info(
+              `Found ${randomIdol.stageName} - ${randomIdol.mainGroupDisplayName}`
+            );
             embedsReturned = [mapIdolToEmbed(randomIdol)];
           }
           if (searchFmk) {
