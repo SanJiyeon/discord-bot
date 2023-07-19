@@ -3,7 +3,10 @@ const {
   GetSecretValueCommand,
 } = require('@aws-sdk/client-secrets-manager');
 
-const client = new SecretsManagerClient();
+const region = 'eu-central-1';
+const client = new SecretsManagerClient({
+  region,
+});
 
 const getSecretValue = async () => {
   const secretName = 'discordKeys'; // Replace with the actual secret name
