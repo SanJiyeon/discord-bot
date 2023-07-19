@@ -15,7 +15,9 @@ const logger = winston.createLogger({
     new WinstonCloudWatch({
       logGroupName: 'DISCORD_BOT_LOG_GROUP',
       logStreamName: 'DISCORD_BOT_LOG_STREAM',
-      awsRegion: 'eu-central-1',
+      awsConfig: {
+        region: 'eu-central-1',
+      },
     }),
   ],
 });
